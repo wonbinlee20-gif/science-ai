@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     {
       method: "POST",
       headers: {
-        "Authorization": "Bearer YOUR_KEY",
+       "Authorization": "Bearer " + process.env.OPENAI_KEY,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
         tools: [{
           type: "file_search",
-          vector_store_ids: ["VS_ID"]
+          vector_store_ids: ["vs_69b3e744fa9c81919220c851d31deaf4"]
         }],
 
         input: [
