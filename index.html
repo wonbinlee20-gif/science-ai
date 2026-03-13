@@ -6,35 +6,49 @@
 </head>
 
 <body>
+  <h2>중3 과학 질문 조교</h2>
 
-<h2>중3 과학 질문 조교</h2>
+  <textarea id="question" rows="5" cols="60"></textarea>
+  <br><br>
+  <button onclick="ask()">질문하기</button>
 
-<textarea id="question" rows="5" cols="50"></textarea>
+  <p id="status"></p>
+  <pre id="answer" style="white-space: pre-wrap;"></pre>
 
-<br><br>
+  <script>
+    async function ask() {
+      const q = document.getElementById("question").value;
+      const status = document.getElementById("status");
+      const answer = document.getElementById("answer");
 
-<button onclick="ask()">질문하기</button>
+      status.innerText = "답변 생성 중...";
+      answer.innerText = "";
 
-<p id="answer"></p>
+      try {
+        const res = await fetch("/api", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ question: q })
+        });
 
-<script>
+        const data = await res.json();
 
-async function ask() {
+        if (!res.ok) {
+          status.innerText = "오류 발생";
+          answer.innerText = JSON.stringify(data, null, 2);
+          return;
+        }
 
-  const q = document.getElementById("question").value;
-
-  const res = await fetch("/api", {
-    method: "POST",
-    body: JSON.stringify({question:q})
-  });
-
-  const data = await res.json();
-
-  document.getElementById("answer").innerText = data.answer;
-
-}
-
-</script>
+        status.innerText = "완료";
+        answer.innerText = data.answer || "답변 없음";
+      } catch (err) {
+        status.innerText = "에러";
+        answer.innerText = String(err);
+      }
+    }
+  </script>
 
 </body>
 </html>
