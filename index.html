@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>중3 질문 조교</title>
+</head>
+
+<body>
+
+<h2>중3 과학 질문 조교</h2>
+
+<textarea id="question" rows="5" cols="50"></textarea>
+
+<br><br>
+
+<button onclick="ask()">질문하기</button>
+
+<p id="answer"></p>
+
+<script>
+
+async function ask() {
+
+  const q = document.getElementById("question").value;
+
+  const res = await fetch("/api", {
+    method: "POST",
+    body: JSON.stringify({question:q})
+  });
+
+  const data = await res.json();
+
+  document.getElementById("answer").innerText = data.answer;
+
+}
+
+</script>
+
+</body>
+</html>
